@@ -218,8 +218,8 @@ public class TreeDemo{
         t1.insert(90);
         t1.insert(22);
 
-        System.out.print("in-order: ");
-        t1.inOrderTraversal(t1.root);
+        System.out.print("post-order: ");
+        t1.postOrderTraversal(t1.root);
         System.out.println();
 
         // Example usage of other methods
