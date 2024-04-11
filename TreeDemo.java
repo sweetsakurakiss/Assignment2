@@ -1,35 +1,59 @@
+/**
+ * Represents a node in a binary search tree.
+ */
 class Node{
     int value;
     Node left, right;
 
+    /**
+     * Constructs a new node with the given value.
+     *
+     * @param value the value to be stored in the node
+     */
     public Node(int value){
         this.value = value;
-        left = null;
-        right = null;
+        this.left = null;
+        this.right = null;
     }
 
 }
-
+/**
+ * Represents a binary search tree and provides various operations on it.
+ */
 class BinarySearchTree{
 
     Node root;
 
 
-    /*
-    recursive insert method
-    */
-    public Node insert(Node root, int value){
+    /**
+     * Inserts a new node with the given value into the binary search tree.
+     *
+     * @param value the value to insert
+     * @return the root node of the updated tree
+     */
+    public Node insert(int value){
+        this.root = insertRecursive(this.root, value);
+        return this.root;
+    }
+
+    /**
+     * Helper method for recursive insertion of nodes.
+     *
+     * @param root  the root node of the current subtree
+     * @param value the value to insert
+     * @return the root node of the updated subtree
+     */
+    private Node insertRecursive(Node root, int value){
         //base case
         if(root == null){
-            root = new Node(value);
-            return root;
+            return new Node(value);
         }
 
         //recursive step
         if(value < root.value){
-            root.left = insert(root.left, value);
+            root.left = insertRecursive(root.left, value);
         }else{
-            root.right = insert(root.right, value);
+            root.right = insertRecursive(root.right, value);
         }
 
         return root;
@@ -37,68 +61,112 @@ class BinarySearchTree{
 
 
 
-    /*
-    pre-order traversal
-    */
+    /**
+     * Performs a pre-order traversal of the binary search tree.
+     *
+     * @param root the root node of the subtree to traverse
+     */
     public void preOrderTraversal(Node root){
-        //implement me
+        if(root != null){
+            System.out.print(root.value + " ");
+            preOrderTraversal(root.left);
+            preOrderTraversal(root.right);
+        }
     }
 
 
-
-    /*
-    in-order traversal
-    */
+    /**
+     * Performs an in-order traversal of the binary search tree.
+     *
+     * @param root the root node of the subtree to traverse
+     */
     public void inOrderTraversal(Node root){
-        //implement me
+        if(root != null){
+            inOrderTraversal(root.left);
+            System.out.print(root.value + " ");
+            inOrderTraversal(root.right);
+        }
     }
 
 
-
-    /*
-    post-order traversal
-    */
+    /**
+     * Performs a post-order traversal of the binary search tree.
+     *
+     * @param root the root node of the subtree to traverse
+     */
     public void postOrderTraversal(Node root){
-        //implement me
+        if(root != null){
+            postOrderTraversal(root.left);
+            postOrderTraversal(root.right);
+            System.out.print(root.value + " ");
+        }
     }
 
 
 
-    /*
-    a method to find the node in the tree
-    with a specific value
-    */
+    /**
+     * Searches for a node with the specified key in the binary search tree.
+     *
+     * @param root the root node of the subtree to search
+     * @param key  the key to search for
+     * @return true if the key is found, false otherwise
+     */
     public boolean find(Node root, int key){
-        //implement me
-        return false;
+        if(root == null){
+            return false;
+        } else if(root.value == key){
+            return true;
+        } else if(key < root.value){
+            return find(root.left, key);
+        } else{
+            return find(root.right, key);
+        }
     }
 
 
 
-    /*
-    a method to find the node in the tree
-    with a smallest key
-    */
+    /**
+     * Finds the minimum value in the binary search tree.
+     *
+     * @param root the root node of the subtree to search
+     * @return the minimum value in the subtree
+     * @throws IllegalArgumentException if the tree is empty
+     */
     public int getMin(Node root){
-        //implement me
+        if(root == null){
+            throw new IllegalArgumentException("Tree is empty");
+        }
+        while(root.left != null){
+            root = root.left;
+        }
+        return root.value;
     }
-
-
-
-    /*
-    a method to find the node in the tree
-    with a largest key
-    */
+    /**
+     * Finds the maximum value in the binary search tree.
+     *
+     * @param root the root node of the subtree to search
+     * @return the maximum value in the subtree
+     * @throws IllegalArgumentException if the tree is empty
+     */
     public int getMax(Node root){
-        //implement me
+        if(root == null){
+            throw new IllegalArgumentException("Tree is empty");
+        }
+        while(root.right != null){
+            root = root.right;
+        }
+        return root.value;
     }
 
 
 
-    /*
-    this method will not compile until getMax
-    is implemented
-    */
+    /**
+     * Deletes a node with the specified key from the binary search tree.
+     *
+     * @param root the root node of the current subtree
+     * @param key  the key to delete
+     * @return the root node of the updated tree
+     */
     public Node delete(Node root, int key){
 
         if(root == null){
@@ -132,10 +200,17 @@ class BinarySearchTree{
 }
 
 
-
+/**
+ * A class demonstrating the usage of BinarySearchTree class.
+ */
 public class TreeDemo{
+    /**
+     * Main method to demonstrate binary search tree operations.
+     *
+     * @param args command-line arguments (not used)
+     */
     public static void main(String[] args){
-        BinarySearchTree t1  = new BinarySearchTree();
+        BinarySearchTree t1 = new BinarySearchTree();
         t1.insert(24);
         t1.insert(80);
         t1.insert(18);
@@ -143,10 +218,15 @@ public class TreeDemo{
         t1.insert(90);
         t1.insert(22);
 
-        System.out.print("in-order :   ");
+        System.out.print("in-order: ");
         t1.inOrderTraversal(t1.root);
         System.out.println();
 
-
+        // Example usage of other methods
+        System.out.println("Min value: " + t1.getMin(t1.root));
+        System.out.println("Max value: " + t1.getMax(t1.root));
+        System.out.println("Value 18 found? " + t1.find(t1.root, 18));
+        System.out.println("Value 100 found? " + t1.find(t1.root, 100));
     }
+
 }
